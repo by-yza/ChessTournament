@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Tournament</title>
+    <link href="matches.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="menu">
+        <img class="logo" src="./images/logo.png" alt="logo">
+    </div>
+    <div class="main">
+        <h1 class="title">CADASTRO DOS JOGADORES</h1>
+        <div class="container">
+            <label for="playerName" class="item1">Nome do Jogador:</label>
+            <input type="text" id="playerName">
+            <button class="button-86" id="addPlayer">Cadastrar</button>
+
+            <h2 class="item1">Jogadores:</h2>
+            <table id="playersTable" class="all">
+                  <thead>
+                        <tr>
+                        <th class="item3">Posição</th>
+                        <th class="item3">Nome</th>
+                        </tr>
+                  </thead>
+                  <tbody></tbody>
+            </table>
+
+            <h2 class="item1">Partidas:</h2>
+            <table id="matchesTable" class="all">
+                  <thead class="fitting">
+                        <tr>
+                        <th class="item3">Jogador 1</th>
+                        <th class="item3">vs</th>
+                        <th class="item3">Jogador 2</th>
+                        <th class="item3">Resultado</th>
+                        </tr>
+                  </thead>
+                  <tbody></tbody>
+            </table>
+            <div class="cont-btn">
+                  <button class="button-2 styling" id="startTournament">Iniciar</button>
+                  <button class="button-2 styling"  id="recordResults">Registrar Resultados</button>
+            </div>
+
+            <h2 class="item1">Top 3 Jogadores:</h2>
+            <ul id="top3List"></ul>
+            <div class="cont-btn">
+                  <button id="saving" class="button-2 styling">Salvar Dados</button>
+                  <button id="exbitingButton" class="button-2 styling">Torneio Anterior</button>
+                  <button id="delete" class="button-2 styling">Excluir Dados</button>
+            </div>
+
+
+        </div>
+
+    </div>
+
+      <script>
+            
+      // Array para armazenar jogadores e suas pontuações
+      let players = [];
+
+      // Array para armazenar resultados das partidas
+      const matchResults = [];
+
+      // Adicionar jogador ao array
+      document.getElementById("addPlayer").addEventListener("click", () => {
+      const playerName = document.getElementById("playerName").value;
+      if (playerName.trim() !== "") {
+            players.push({
+                  name: playerName,
+                  score: 0,
+            });
+            document.getElementById("playerName").value = "";
+            updatePlayerList();
+      }
+      });
+
+      // Iniciar torneio
+      document.getElementById("startTournament").addEventListener("click", () => {
+      generateMatches();
+      });
+
+      // Gerar partidas
+      function generateMatches() {
+            const matchesTable = document.getElementById("matchesTable");
+            matchesTable.innerHTML = "";
+
+            for (let i = 0; i < players.length; i++) {
+                  for (let j = i + 1; j < players.length; j++) {
+                        const matchRow = document.createElement("tr");
+                        matchRow.innerHTML = `
+                              <td>${players[i].name}</td>
+                              <td>vs</td>
+                              <td>${players[j].name}</td>
+                              <td><input type="text" class="resultInput" placeholder="Resultado"></td>
+                              `;
+                        matchesTable.appendChild(matchRow);
+                  }
+            }
+      }
+      // Registrar Resultados
+      document.getElementById("recordResults").addEventListener("click", () => {
+      const resultInputs = document.querySelectorAll(".resultInput");
+
+      resultInputs.forEach((input) => {
+            const result = input.value.trim();
+            const playersInMatch =
+                  input.parentElement.parentElement.getElementsByTagName("td");
+            const player1Name = playersInMatch[0].textContent;
+            const player2Name = playersInMatch[2].textContent;
+
+            if (result === player1Name) {
+                  updatePlayerScore(player1Name, 2);
+            } else if (result === player2Name) {
+                  updatePlayerScore(player2Name, 2);
+            } else {
+                  updatePlayerScore(player1Name, 1);
+                  updatePlayerScore(player2Name, 1);
+            }
+      });
+
+      // Ordenar jogadores por pontuação (decrescente)
+      players.sort((a, b) => b.score - a.score);
+
+      // Exibir o top 3 jogadores
+      showTop3();
+
+      // Ordenar jogadores por pontuação (decrescente)
+      players.sort((a, b) => b.score - a.score);
+
+      // Exibir o top 3 jogadores
+      showTop3();
+      });
+
+      // Atualizar pontuação do jogador
+      function updatePlayerScore(playerName, points) {
+            const player = players.find((player) => player.name === playerName);
+            if (player) {
+                  player.score += points;
+            }
+      }
+
+      // Atualizar lista de jogadores
+      function updatePlayerList() {
+            const playersTable = document.getElementById("playersTable").getElementsByTagName("tbody")[0];
+            playersTable.innerHTML = "";
+            players.forEach((player, index) => {
+                  const row = playersTable.insertRow();
+                  const cellIndex = row.insertCell(0);
+                  const cellName = row.insertCell(1);
+                  const cellScore = row.insertCell(2);
+                  cellIndex.innerHTML = index + 1;
+                  cellName.innerHTML = player.name;
+                  cellScore.innerHTML = player.score;
+            });
+      }
+
+      // Exibir o top 3 jogadores
+      function showTop3() {
+            const top3List = document.getElementById("top3List");
+            top3List.innerHTML = "";
+
+            for (let i = 0; i < Math.min(3, players.length); i++) {
+                  const player = players[i];
+                  const listItem = document.createElement("li");
+                  listItem.textContent = `${player.name} - ${player.score} ponto(s)`;
+                  top3List.appendChild(listItem);
+            }
+      }
+
+      // Local Storage
+
+            function gravar (){
+                  localStorage.setItem("players",JSON.stringify(players));
+            }
+
+            function recuperar () {
+
+                  players=localStorage.getItem("players");
+                  players=JSON.parse(players);
+
+                  // Utilizando código já feito para exibir top 3
+                  const top3List = document.getElementById("top3List");
+                  top3List.innerHTML = "";
+
+                  for (let i = 0; i < Math.min(3, players.length); i++) {
+                  const player = players[i];
+                  const listItem = document.createElement("li");
+                  listItem.textContent = `${player.name} - ${player.score} ponto(s)`;
+                  top3List.appendChild(listItem);
+                  }
+            }
+
+            function limpar() {
+            localStorage.removeItem('players');
+            } 
+
+
+      //Chamando as funções
+      document.getElementById("saving").addEventListener("click", gravar);
+      document.getElementById("exbitingButton").addEventListener("click", recuperar);
+      document.getElementById("delete").addEventListener("click", limpar);
+      
+      
+      </script>
+</body>
+</html>
