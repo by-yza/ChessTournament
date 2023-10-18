@@ -193,6 +193,34 @@
                   listItem.textContent = `${player.name} - ${player.score} ponto(s)`;
                   top3List.appendChild(listItem);
                   }
+
+                    
+                  const matchesTable = document.getElementById("matchesTable");
+                  matchesTable.innerHTML = "";
+                  for (let i = 0; i < players.length; i++) {
+                        for (let j = i + 1; j < players.length; j++) {
+                              const matchRow = document.createElement("tr");
+                              matchRow.innerHTML = `
+                                    <td>${players[i].name}</td>
+                                    <td>vs</td>
+                                    <td>${players[j].name}</td>
+                                    <td><input type="text" class="resultInput" placeholder="Resultado"></td>
+                                    `;
+                              matchesTable.appendChild(matchRow);
+                        }
+                  }
+
+                  const playersTable = document.getElementById("playersTable").getElementsByTagName("tbody")[0];
+                  playersTable.innerHTML = "";
+                  players.forEach((player, index) => {
+                        const row = playersTable.insertRow();
+                        const cellIndex = row.insertCell(0);
+                        const cellName = row.insertCell(1);
+                        const cellScore = row.insertCell(2);
+                        cellIndex.innerHTML = index + 1;
+                        cellName.innerHTML = player.name;
+                        cellScore.innerHTML = player.score;
+                  });
             }
 
             function limpar() {
