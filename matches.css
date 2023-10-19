@@ -44,10 +44,12 @@
 
 /* ESTILO DA CAIXA E SEUS ITENS */
 
+
 .container{
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
       width: 60vw;
       height: fit-content;
       background-color:#f4f4f4;
@@ -93,12 +95,15 @@ td{
       display: flex;
       flex-direction: row;
       margin-top: 1.5vw;
-      background-color: #f4f4f4;
+      padding: 3vw;
+      background-color: transparent;
+      justify-content: space-around;
+
 }
+
 .styling{
-      margin-left: 1.5vw;
-      margin-right: 1.5vw;
-      margin-bottom: 5vw;
+      margin: 1vw;
+      justify-content: space-between;
 }
 ul{
       background-color: #f4f4f4;
@@ -194,7 +199,6 @@ li{
   font-weight: 500;
   line-height: 20px;
   list-style: none;
-  padding: 10px 12px;
   text-align: center;
   transition: all 200ms;
   vertical-align: baseline;
@@ -202,4 +206,33 @@ li{
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+
+
+}
+
+@media (max-width: 700px){
+    h1{
+        font-size:large;
+    }
+    .container{
+        width: 80%;
+    }
+    .button-86{
+        width: 40%;
+    }
+    #playerName{
+        width: 70%;
+    }
+    .item1{
+        font-size: 80%;
+        width: 20vw;
+    }
+    .item3{
+        font-size: 80%;
+        width: 20vw;
+    }
+    .all{
+        margin: 20px;
+    }
+
 }
